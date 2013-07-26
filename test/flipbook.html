@@ -1,0 +1,77 @@
+<html>
+<head>
+</head>
+<link type="text/css" rel="stylesheet" href="basic.css"></link>
+<link type="text/css" rel="stylesheet" href="default.css"></link>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+<script type="text/javascript" src="../turn.js/turn.min.js"></script>
+<body>
+
+<div id="flipbook">
+	<div class="hard" id="cover"> Testing </div>
+	<div class="hard"></div>
+	<div>
+		<h3> Contents </h3>
+		<ul>
+			<li> 1 </li>
+			<li> 2 </li>
+		</ul>
+	</div>
+	<div> Page 2 </div>
+	<div> Page 3 </div>
+	<div> Page 4 </div>
+	<div class="hard"></div>
+	<div class="hard"></div>
+</div>
+</body>
+<script type="text/javascript">
+	$("#flipbook").turn({
+		width: 800,
+		height: 600,
+		autoCenter: true
+	});
+</script>
+<script type="text/javascript">
+var dataset = [],
+	i = 0,
+	h = 300,
+	w = 398;
+	
+for (i = 0; i < 5; i++) {
+	dataset.push(Math.round(Math.random()*250));
+}
+
+var svg = d3.select("#cover")
+	.append("svg")
+	.attr("width", w)
+	.attr("height", h)
+	.style("border", "1px solid black");
+	
+var circles = svg.selectAll("circle")
+	.data(dataset)
+	.enter().append("circle")
+	.style("stroke", "gray")
+	.style("fill", "white")
+	.attr("r", 20)
+	.attr("cx", function(d,i) {return i*80})
+	.attr("cy", function(d) {return d})
+	.on("mouseover", function(){d3.select(this).style("fill", "aliceblue");})
+	.on("mouseout", function(){d3.select(this).style("fill", "white");})
+	.on("mousedown", animateFirstStep);
+	
+function animateFirstStep() {
+	d3.select(this).transition()
+		.duration(1000)
+		.attr("r", 5)
+		.each("end", animateSecondStep);
+}
+
+function animateSecondStep() {
+	d3.select(this).transition()
+		.duration(1000)
+		.attr("r", 20);
+}
+
+</script>
+</html>
